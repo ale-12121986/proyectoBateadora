@@ -5,7 +5,7 @@ uint8_t pin4 = 0;
 uint8_t pin5 = 0;
 uint8_t pin6 = 0;
 
-float alpha2 = 0.1;  // Factor de suavizado
+float alpha2 = 0.5;  // Factor de suavizado
 float alineacion = 0, peralte = 0, nivelIzquierdo = 0, nivelDerecho = 0;
 
 const char * TAG2 ="grupoMedicion";
@@ -63,6 +63,9 @@ void activarMultiplexor2(int8_t sensor){
         break;
     }
 }
+float map(float adc, float in_min, float in_max, float out_min,float out_max){
+    return (adc - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 float leerTransmisorMedicion(int8_t sensor){
     float salida_filtrada = 0;
@@ -72,32 +75,27 @@ float leerTransmisorMedicion(int8_t sensor){
     switch (sensor)
     {
     case 1:
-        //alineacion = alpha2 * valor + (1 - alpha2) * alineacion;
-        alineacion = valor;
-        salida_filtrada = alineacion;
+         alineacion = alpha2 * valor + (1 - alpha2) * alineacion;
+        salida_filtrada =map(alineacion, 0, 4096, -434.782, 434.782);
         break;
     
     case 2:
-        //peralte = alpha2 * valor + (1 - alpha2) * peralte;
-        peralte = valor;
-        salida_filtrada = peralte;  
+        peralte = alpha2 * valor + (1 - alpha2) * peralte;  
+        salida_filtrada =map(peralte, 0, 4096, -400, 400);
         break;
 
     case 3:
-        //nivelIzquierdo = alpha2 * valor + (1 - alpha2) * nivelIzquierdo;
-        nivelIzquierdo = valor;
-        salida_filtrada = nivelIzquierdo;  
+        nivelIzquierdo = alpha2 * valor + (1 - alpha2) * nivelIzquierdo;
+        salida_filtrada =map(nivelIzquierdo, 0, 4096, -111.111, 111.111);  
         break;
 
     case 4:
-        //nivelDerecho = alpha2 * valor + (1 - alpha2) * nivelDerecho;
-        nivelDerecho = valor;
-        salida_filtrada = nivelDerecho;
+        nivelDerecho = alpha2 * valor + (1 - alpha2) * nivelDerecho;
+        salida_filtrada =map(nivelDerecho, 0, 4096, -111.111, 111.111);
         break;
     default:
         break;
     }
     
-
     return salida_filtrada;
 }

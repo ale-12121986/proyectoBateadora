@@ -6,7 +6,7 @@ uint8_t pin1 = 0;
 uint8_t pin2 = 0;
 uint8_t pin3 = 0;
 
-float alpha = 0.1;  // Factor de suavizado
+float alpha = 0.5;  // Factor de suavizado
 
 uint8_t pos = 0;
 
@@ -25,11 +25,11 @@ void configPin(uint8_t pin_1, uint8_t pin_2, uint8_t pin_3){
     gpio_set_direction(pin2, GPIO_MODE_DEF_OUTPUT);
     gpio_set_direction(pin3, GPIO_MODE_DEF_OUTPUT);
     
-    //ESP_LOGI(TAG,"configPin");
+    ESP_LOGI(TAG,"configPin");
 }
 
 void configAdc(void){
-    adc1_config_channel_atten(ADC1_CHANNEL_6, ADC_ATTEN_DB_11 );
+    adc1_config_channel_atten(ADC1_CHANNEL_4, ADC_ATTEN_DB_11 );
     adc1_config_width(ADC_WIDTH_BIT_12);
     
 }
@@ -66,35 +66,35 @@ void activarMultiplexor1(int8_t sensor){
     }
 }
 
+float map2(float adc, float in_min, float in_max, float out_min,float out_max){
+    return (adc - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 float leerTransmisor(int8_t sensor){
     float salida_filtrada = 0;
     activarMultiplexor1(sensor);
     vTaskDelay(3 / portTICK_PERIOD_MS);
-    float valor = adc1_get_raw(ADC1_CHANNEL_6);
+    float valor = adc1_get_raw(ADC1_CHANNEL_4);
     switch (sensor)
     {
     case 1:
-        //grupoBateoIzquieroExterno = alpha * valor + (1 - alpha) * grupoBateoIzquieroExterno;
-        grupoBateoIzquieroExterno = valor;
-        salida_filtrada = grupoBateoIzquieroExterno;
+        grupoBateoIzquieroExterno = alpha * valor + (1 - alpha) * grupoBateoIzquieroExterno;
+        salida_filtrada = map2(grupoBateoIzquieroExterno, 0, 4096, -10, 10);
         break;
     
     case 2:
-        //grupoBateoIzquieroInterno = alpha * valor + (1 - alpha) * grupoBateoIzquieroInterno;
-        grupoBateoIzquieroInterno = valor;
-        salida_filtrada = grupoBateoIzquieroInterno;  
+        grupoBateoIzquieroInterno = alpha * valor + (1 - alpha) * grupoBateoIzquieroInterno;
+        salida_filtrada = map2(grupoBateoIzquieroInterno, 0, 4096, -10, 10);
         break;
 
     case 3:
-        //grupoBateoDerechoInterno = alpha * valor + (1 - alpha) * grupoBateoDerechoInterno;
-        grupoBateoDerechoInterno = valor;
-        salida_filtrada = grupoBateoDerechoInterno;  
+        grupoBateoDerechoInterno = alpha * valor + (1 - alpha) * grupoBateoDerechoInterno;
+        salida_filtrada = map2(grupoBateoDerechoInterno, 0, 4096, -10, 10);
         break;
 
     case 4:
-        //grupoBateoDerechoExterno = alpha * valor + (1 - alpha) * grupoBateoDerechoExterno;
-        grupoBateoDerechoExterno = valor;
-        salida_filtrada = grupoBateoDerechoExterno;
+        grupoBateoDerechoExterno = alpha * valor + (1 - alpha) * grupoBateoDerechoExterno;
+        salida_filtrada = map2(grupoBateoDerechoExterno, 0, 4096, -10, 10);
         break;
     default:
         break;
