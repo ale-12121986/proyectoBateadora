@@ -30,8 +30,8 @@ const char *TAG3 = "main";
 TimerHandle_t xTimers;
 int intervalo = 50;
 int timerId = 1;
-uint8_t pot = 0;
-float distanciaRecorrida = 0.0, distanRecorridaFinal = 0.0;
+uint8_t pot = 0, distanciaRecorrida = 0;
+uint32_t distanRecorridaFinal = 0;
 uint8_t estado = 0;
 uint8_t valorP = 0;
 uint8_t ledLevel = 0;
@@ -191,24 +191,23 @@ static void init_uart(void)
 
 void vTimerCallback(TimerHandle_t pxTimer)
 {
-    if (estado ==1)
-    {
-        valorP = gpio_get_level(pulso);    
-        if (valorP == 0)
-        {
-            while (valorP == 0)
-            {
-                valorP = gpio_get_level(pulso);
-            }
-            distanciaRecorrida++;
-            if (distanciaRecorrida == 15)
-            {
-            distanciaRecorrida = 0;
-            distanRecorridaFinal++;
-            
-            }
-        }   
-    }
+    // if (estado ==1)
+    // {
+    //     valorP = gpio_get_level(pulso);    
+    //     if (valorP == 0)
+    //     {
+    //         while (valorP == 0)
+    //         {
+    //             valorP = gpio_get_level(pulso);
+    //         }
+    //         distanciaRecorrida++;
+    //         if (distanciaRecorrida == 15)
+    //         {
+    //              distanciaRecorrida = 0;
+    //              distanRecorridaFinal++;       
+    //         }
+    //     }   
+    // }
 }
         
 void setTimer()
@@ -233,9 +232,33 @@ void setTimer()
         }
     }
 }
+void isr_handler(void *args)
+{
+    distanciaRecorrida++;
+    if (distanciaRecorrida == 15)
+    {
+        distanciaRecorrida = 0;
+        distanRecorridaFinal++;
+    }
+}
+
+void initIrs(void){
+    gpio_config_t pGIOConfig;
+    pGIOConfig.pin_bit_mask = (1ULL << pulso);       /*!< GPIO pin: set with bit mask, each bit maps to a GPIO */
+    pGIOConfig.mode = GPIO_MODE_INPUT;               /*!< GPIO mode: set input/output mode                     */
+    pGIOConfig.pull_up_en = GPIO_PULLUP_DISABLE;     /*!< GPIO pull-up                                         */
+    pGIOConfig.pull_down_en = GPIO_PULLDOWN_DISABLE; /*!< GPIO pull-down                                       */
+    pGIOConfig.intr_type = GPIO_INTR_NEGEDGE; 
+
+    gpio_config(&pGIOConfig);
+    gpio_install_isr_service(0);
+    gpio_isr_handler_add(pulso, isr_handler, NULL);
+    ESP_LOGI(TAG3,"Se configuro la interrupcion");
+}
 
 void app_main(void)
 {
+    initIrs();
     init_uart();
     configPin(pin_1, pin_2, pin_3);
     configPinMedicion(pin_4, pin_5, pin_6);
@@ -244,8 +267,8 @@ void app_main(void)
     setTimer();
     gpio_reset_pin(led);
     gpio_set_direction(led, GPIO_MODE_DEF_OUTPUT); 
-    gpio_reset_pin(pulso);
-    gpio_set_direction(pulso, GPIO_MODE_DEF_INPUT);
+    // gpio_reset_pin(pulso);
+    //gpio_set_direction(pulso, GPIO_MODE_DEF_INPUT);
     while (1)
     {
         if (strcmp(valor, "gb") == 0)
@@ -256,7 +279,6 @@ void app_main(void)
             {
                 pot = 1;
             }
-            // vTaskDelay(50 / portTICK_PERIOD_MS);
             sendMessage(leerTransmisor(pot), pot);
         }
         if (strcmp(valor, "gm") == 0)
@@ -266,10 +288,8 @@ void app_main(void)
             if (pot == 5)
             {
                 pot = 1;
-                sendMessage(distanRecorridaFinal, 10);    
-            }
-            // vTaskDelay(50 / portTICK_PERIOD_MS);
-            
+                sendMessage((float)distanRecorridaFinal, 10);    
+            }    
             sendMessage(leerTransmisorMedicion(pot), pot);
         }    
         vTaskDelay(50 / portTICK_PERIOD_MS);
