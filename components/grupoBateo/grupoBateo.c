@@ -25,7 +25,7 @@ void configPin(uint8_t pin_1, uint8_t pin_2, uint8_t pin_3){
     gpio_set_direction(pin2, GPIO_MODE_DEF_OUTPUT);
     gpio_set_direction(pin3, GPIO_MODE_DEF_OUTPUT);
     
-    ESP_LOGI(TAG,"configPin");
+    //ESP_LOGI(TAG,"configPin");
 }
 
 void configAdc(void){

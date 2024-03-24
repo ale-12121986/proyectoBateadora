@@ -5,7 +5,7 @@ uint8_t pin4 = 0;
 uint8_t pin5 = 0;
 uint8_t pin6 = 0;
 
-float alpha2 = 0.5;  // Factor de suavizado
+float alpha2 = 0.9;  // Factor de suavizado
 float alineacion = 0, peralte = 0, nivelIzquierdo = 0, nivelDerecho = 0;
 
 const char * TAG2 ="grupoMedicion";
@@ -77,6 +77,7 @@ float leerTransmisorMedicion(int8_t sensor){
     case 1:
          alineacion = alpha2 * valor + (1 - alpha2) * alineacion;
         salida_filtrada =map(alineacion, 0, 4096, -434.782, 434.782);
+        //ESP_LOGI(TAG2,"alineacion:%f", salida_filtrada);
         break;
     
     case 2:

@@ -2,6 +2,7 @@
 #include <string.h>
 #include "grupoBateo.h"
 #include "grupoMedicion.h"
+#include "comunicacionWiFi.h"
 #include "freertos/FreeRTOS.h"
 #include "driver/gpio.h"
 #include "freertos/task.h"
@@ -83,31 +84,32 @@ void sendMessage(float valorPot, int sensor)
         case 1:
             strcpy(cadena, "page1.NmAlineacion.txt=\""); // copia las cadenas de caracteres
             strcat(cadena, buffer);
-            strcat(cadena, "\"\xFF\xFF\xFF");
+            strcat(cadena, "mm\"\xFF\xFF\xFF");
+            //ESP_LOGI(TAG3,"alineacion:%s",cadena);
             break;
 
         case 2:
             strcpy(cadena, "page1.NmPeralte.txt=\""); // copia las cadenas de caracteres
             strcat(cadena, buffer);
-            strcat(cadena, "\"\xFF\xFF\xFF");
+            strcat(cadena, "mm\"\xFF\xFF\xFF");
             break;
 
         case 3:
             strcpy(cadena, "page1.NmNivelIz.txt=\""); // copia las cadenas de caracteres
             strcat(cadena, buffer);
-            strcat(cadena, "\"\xFF\xFF\xFF");
+            strcat(cadena, "mm\"\xFF\xFF\xFF");
             break;
 
         case 4:
             strcpy(cadena, "page1.NmNivelDe.txt=\""); // copia las cadenas de caracteres
             strcat(cadena, buffer);
-            strcat(cadena, "\"\xFF\xFF\xFF");
+            strcat(cadena, "mm\"\xFF\xFF\xFF");
             break;
 
         case 10:
             strcpy(cadena, "page1.NmDistancia.txt=\""); // copia las cadenas de caracteres
             strcat(cadena, buffer);
-            strcat(cadena, "\"\xFF\xFF\xFF");
+            strcat(cadena, "m\"\xFF\xFF\xFF");
         default:
             break;
         }
@@ -191,23 +193,7 @@ static void init_uart(void)
 
 void vTimerCallback(TimerHandle_t pxTimer)
 {
-    // if (estado ==1)
-    // {
-    //     valorP = gpio_get_level(pulso);    
-    //     if (valorP == 0)
-    //     {
-    //         while (valorP == 0)
-    //         {
-    //             valorP = gpio_get_level(pulso);
-    //         }
-    //         distanciaRecorrida++;
-    //         if (distanciaRecorrida == 15)
-    //         {
-    //              distanciaRecorrida = 0;
-    //              distanRecorridaFinal++;       
-    //         }
-    //     }   
-    // }
+
 }
         
 void setTimer()
@@ -253,7 +239,7 @@ void initIrs(void){
     gpio_config(&pGIOConfig);
     gpio_install_isr_service(0);
     gpio_isr_handler_add(pulso, isr_handler, NULL);
-    ESP_LOGI(TAG3,"Se configuro la interrupcion");
+    //ESP_LOGI(TAG3,"Se configuro la interrupcion");
 }
 
 void app_main(void)
@@ -264,11 +250,13 @@ void app_main(void)
     configPinMedicion(pin_4, pin_5, pin_6);
     configAdc();
     configAdc2();
-    setTimer();
+    // setTimer();
+    configurarWiFi();
     gpio_reset_pin(led);
     gpio_set_direction(led, GPIO_MODE_DEF_OUTPUT); 
     // gpio_reset_pin(pulso);
     //gpio_set_direction(pulso, GPIO_MODE_DEF_INPUT);
+    void configurar();
     while (1)
     {
         if (strcmp(valor, "gb") == 0)
