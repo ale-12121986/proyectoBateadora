@@ -39,9 +39,7 @@ uint8_t ledLevel = 0;
 char valor[20];
 static QueueHandle_t uart_queue;
 
-    
-void sendMessage(float valorPot, int sensor)
-{
+void sendMessage(float valorPot, int sensor){
     char cadena [30];
     char buffer[30];
     snprintf(buffer, sizeof(buffer), "%4.1f", valorPot);
@@ -138,7 +136,7 @@ static void uart_task(void *pvParameters)
                 strcpy(valor, data);
                 //free(data);
                 // data = NULL;
-                // ESP_LOGI(TAG3,"Se envio el dato:%s", data);
+                 ESP_LOGI(TAG3,"Se envio el dato:%s", data);
                 break;
             case UART_BUFFER_FULL:
                 ESP_LOGI(TAG3, "ring buffer full");
@@ -193,7 +191,7 @@ static void init_uart(void)
 
 void vTimerCallback(TimerHandle_t pxTimer)
 {
-
+    // void mqttIniciar(void);
 }
         
 void setTimer()
@@ -251,14 +249,32 @@ void app_main(void)
     configAdc();
     configAdc2();
     // setTimer();
-    configurarWiFi();
+    wifi_init_sta();
     gpio_reset_pin(led);
     gpio_set_direction(led, GPIO_MODE_DEF_OUTPUT); 
     // gpio_reset_pin(pulso);
     //gpio_set_direction(pulso, GPIO_MODE_DEF_INPUT);
-    void configurar();
+    
+    // void configurar();
+    
+    // void mqtt_app_start();
+    // void enviar_mensaje("Hola desde ESP32, me comunico con el servidor y espero informacion de la 201");
+    
     while (1)
     {
+        if(strcmp(valor, "cn") == 0){
+            char dato[10];
+            char cadena[30];
+            ESP_LOGI(TAG3, "Entro a configurar WiFi y MQTT");
+            configurarWiFi();
+            mqttIniciar();
+            bzero(valor, sizeof(valor));
+            strcpy(dato, "Conectado");
+            strcpy(cadena, "page0.BtnConectar.txt=\""); // copia las cadenas de caracteres
+            strcat(cadena, dato);
+            strcat(cadena, "\"\xFF\xFF\xFF");
+            uart_write_bytes(uart_num,cadena, strlen(cadena));
+        }
         if (strcmp(valor, "gb") == 0)
         {
             estado = 0;
