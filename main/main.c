@@ -29,6 +29,7 @@
 const char *TAG3 = "main";
 
 TimerHandle_t xTimers;
+bool comunicacion = false;
 int intervalo = 50;
 int timerId = 1;
 uint8_t pot = 0, distanciaRecorrida = 0;
@@ -36,14 +37,16 @@ uint32_t distanRecorridaFinal = 0;
 uint8_t estado = 0;
 uint8_t valorP = 0;
 uint8_t ledLevel = 0;
+float alineacion2 = 0,  peralte2 = 0, nivelIzquierdo2 = 0, nivelDerecho2 = 0;
+int16_t distancia2 = 0, idtrabajo2 = 0, tipoMedicion2 = 0;
 char valor[20];
 static QueueHandle_t uart_queue;
 
 void sendMessage(float valorPot, int sensor){
     char cadena [30];
     char buffer[30];
-    snprintf(buffer, sizeof(buffer), "%4.1f", valorPot);
-    //sprintf(buffer, "%4.1f", valorPot);
+    snprintf(buffer, sizeof(buffer),"%4.1f", valorPot);
+    
     if (strcmp(valor, "gb") == 0)
     {
         switch (sensor)
@@ -99,12 +102,14 @@ void sendMessage(float valorPot, int sensor){
             break;
 
         case 4:
+            
             strcpy(cadena, "page1.NmNivelDe.txt=\""); // copia las cadenas de caracteres
             strcat(cadena, buffer);
             strcat(cadena, "mm\"\xFF\xFF\xFF");
             break;
 
         case 10:
+            
             strcpy(cadena, "page1.NmDistancia.txt=\""); // copia las cadenas de caracteres
             strcat(cadena, buffer);
             strcat(cadena, "m\"\xFF\xFF\xFF");
@@ -180,14 +185,13 @@ static void init_uart(void)
         .source_clk = UART_SCLK_APB,
     };
     uart_param_config(uart_num, &uart_config);
-    //uart_set_pin(uart_num, 1, 3, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE); //configurar para tx0 y rx0
-    uart_set_pin(uart_num, pin_tx, pin_rx,UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    uart_set_pin(uart_num, 1, 3, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE); //configurar para tx0 y rx0
+    // uart_set_pin(uart_num, pin_tx, pin_rx,UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
     uart_driver_install(uart_num, BUFE_SIZE, BUFE_SIZE, 5, &uart_queue, 0);
     xTaskCreate(uart_task, "uart_task", TASK_MEMORY, NULL, 5, NULL);
 
     // ESP_LOGI(TAG,"inicio de comunicacion serial completa");
 }
-
 
 void vTimerCallback(TimerHandle_t pxTimer)
 {
@@ -221,8 +225,12 @@ void isr_handler(void *args)
     distanciaRecorrida++;
     if (distanciaRecorrida == 15)
     {
+        
+        comunicacion = true;
+        gpio_set_level(led,1);
         distanciaRecorrida = 0;
         distanRecorridaFinal++;
+        distancia2 = distanRecorridaFinal;
     }
 }
 
@@ -250,31 +258,36 @@ void app_main(void)
     configAdc2();
     // setTimer();
     wifi_init_sta();
+    configurarWiFi();
     gpio_reset_pin(led);
     gpio_set_direction(led, GPIO_MODE_DEF_OUTPUT); 
-    // gpio_reset_pin(pulso);
-    //gpio_set_direction(pulso, GPIO_MODE_DEF_INPUT);
-    
-    // void configurar();
-    
-    // void mqtt_app_start();
-    // void enviar_mensaje("Hola desde ESP32, me comunico con el servidor y espero informacion de la 201");
     
     while (1)
     {
         if(strcmp(valor, "cn") == 0){
+            
             char dato[10];
             char cadena[30];
             ESP_LOGI(TAG3, "Entro a configurar WiFi y MQTT");
-            configurarWiFi();
-            mqttIniciar();
-            bzero(valor, sizeof(valor));
+            mqttIniciar();   
+            // bzero(valor, sizeof(valor));
+            strcpy(valor, "");
             strcpy(dato, "Conectado");
             strcpy(cadena, "page0.BtnConectar.txt=\""); // copia las cadenas de caracteres
             strcat(cadena, dato);
             strcat(cadena, "\"\xFF\xFF\xFF");
+            buscarIdTrabajo();
             uart_write_bytes(uart_num,cadena, strlen(cadena));
         }
+        if (comunicacion == true)
+        {
+            comunicacion = false;
+            idtrabajo2 = 16;
+            enviarData( alineacion2, peralte2, nivelIzquierdo2, nivelDerecho2, distancia2, idtrabajo2, tipoMedicion2);
+            gpio_set_level(led,0);
+            ESP_LOGI(TAG3, "envia mensaje de valor de recorrido");
+        }
+        
         if (strcmp(valor, "gb") == 0)
         {
             estado = 0;

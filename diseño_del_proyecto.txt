@@ -1,0 +1,29 @@
+proyectoBateadora/
+│
+├── build/
+│
+├── main/
+│    ├── CMakeLists.txt
+│    └── main.c
+└── components
+     ├── comunicacionWiFi/
+     │     ├── include/
+     │     |     └── comunicacionWiFi.h
+     │     ├── ESP32_1.crt
+     │     ├── rootCA.crt
+     │     ├── ESP32_1.key
+     │     ├── CMakeLists.txt
+     │     ├── components.mk
+     │     └── comunicacionWiFi.c
+     ├── grupoBateo/
+     │     ├── include/
+     │     │    └── grupoBateo.h
+     │     ├── CMakeLists.txt
+     │     └── grupoBateo.c
+     └── grupoMedicion/
+           ├── include/
+           |     └── grupoMedicion.h
+           ├── CMakeLists.txt
+           └── grupoMedicion.c
+
+    

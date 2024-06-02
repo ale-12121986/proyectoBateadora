@@ -23,7 +23,8 @@
         "adc.h": "c",
         "gpio.h": "c",
         "timers.h": "c",
-        "mqtt_client.h": "c"
+        "mqtt_client.h": "c",
+        "comunicacionwifi.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
