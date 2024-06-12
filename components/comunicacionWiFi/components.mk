@@ -1,1 +1,1 @@
-COMPONENT_EMBED_TXTFILES := ESP32_1.crt ESP32_1.key rootCA.crt
+COMPONENT_EMBED_TXTFILES := client.crt client.key ca.crt

@@ -13,7 +13,7 @@
     ],
     "idf.pythonBinPathWin": "d:\\ESP32\\.espressif\\python_env\\idf5.0_py3.11_env\\Scripts\\python.exe",
     "idf.toolsPathWin": "d:\\ESP32\\.espressif",
-    "idf.portWin": "COM8",
+    "idf.portWin": "COM13",
     "idf.flashType": "UART",
     "files.associations": {
         "task.h": "c",

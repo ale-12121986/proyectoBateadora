@@ -1,0 +1,21 @@
+modificaciones:
+
+# Incluir el componente comunicacionWiFi
+#set(EXTRA_COMPONENT_DIRS components/comunicacionWiFi)
+
+
+EMBED_TXTFILES ESP32_1.crt ESP32_1.key rootCA.crt
+
+
+
+
+
+
+
+# COMPONENT_EMBED_TXTFILES := ESP32_1.crt ESP32_1.key rootCA.crt
+
+
+es para crear un archivo
+components.mk
+COMPONENT_EMBED_TXTFILES := client2-cert.pem client2-key.pem cacert.pem
+ EMBED_TXTFILES client2-key.pem client2-cert.pem cacert.pem

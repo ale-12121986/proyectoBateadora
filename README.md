@@ -1,12 +1,10 @@
 | Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-S2 | ESP32-S3 |
 | ----------------- | ----- | -------- | -------- | -------- | -------- |
 
-# _Sample project_
-
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
-
-This is the simplest buildable example. The example is used by command `idf.py create-project`
-that copies the project to user specified path and set it's name. For more information follow the [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project)
+# PproyectoBateadora
+## informacion general
+Este sistema se va a encargar de recopilar todos los datos de la geometria de la via y enviarlos por protocola MQTT a un servidor en la nube.
+Consta de una pantalla tactil en la cual se va a a ver los valores de los transmisores y de los grupos de bajada 
 
 
 
@@ -25,11 +23,34 @@ files that provide set of directives and instructions describing the project's s
 Below is short explanation of remaining files in the project folder.
 
 ```
-├── CMakeLists.txt
-├── main
-│   ├── CMakeLists.txt
-│   └── main.c
-└── README.md                  This is the file you are currently reading
+proyectoBateadora/
+│
+├── build/
+│
+├── main/
+│    ├── CMakeLists.txt
+│    └── main.c
+└── components
+     ├── comunicacionWiFi/
+     │     ├── include/
+     │     |     └── comunicacionWiFi.h
+     │     ├── ESP32_1.crt
+     │     ├── rootCA.crt
+     │     ├── ESP32_1.key
+     │     ├── CMakeLists.txt
+     │     ├── components.mk
+     │     └── comunicacionWiFi.c
+     ├── grupoBateo/
+     │     ├── include/
+     │     │    └── grupoBateo.h
+     │     ├── CMakeLists.txt
+     │     └── grupoBateo.c
+     └── grupoMedicion/
+           ├── include/
+           |     └── grupoMedicion.h
+           ├── CMakeLists.txt
+           └── grupoMedicion.c
+
 ```
 Additionally, the sample project contains Makefile and component.mk files, used for the legacy Make based build system. 
 They are not used or needed when building with CMake and idf.py.

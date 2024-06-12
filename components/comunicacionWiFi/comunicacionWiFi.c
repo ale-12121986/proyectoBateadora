@@ -151,13 +151,13 @@ static void mqtt_app_start(void){
         
     esp_mqtt_client_config_t mqtt_cfg = {
         .broker.address.uri = MQTT_URI,
-        .credentials.username = "BateadorasVyO",
-        .credentials.authentication.password = "Trenes_Argentinos",
+        .credentials.username = "Bateadora201",      //BateadorasVyO     Bateadora201
+        // .credentials.authentication.password = "Trenes_Argentinos",
         .session.keepalive = MQTT_KEEPALIVE_INTERVAL,
         .broker.verification.certificate = (const char *)server_cert_pem_start,
         .credentials.authentication.certificate = (const char *)client_cert_pem_start,
         .credentials.authentication.key = (const char *)client_key_pem_start,
-};
+    };
     client = esp_mqtt_client_init(&mqtt_cfg);
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     ESP_LOGI(TAG4, "[APP] Free memory: %ld bytes", esp_get_free_heap_size());
@@ -184,7 +184,7 @@ void buscarIdTrabajo(){
     ESP_LOGI(TAG4, "sent publish successful, msg_id=%d", msg_id);
 }
 void enviarData(float alineacion, float  peralte, float nivel_izquierdo, float nivel_derecho, int distancia, int idtrabajo2, int tipoMedicion){
-    char payload[256]; // Increased buffer size for additional data
+    char payload[300]; // Increased buffer size for additional data
     idtrabajo2 = numero;
     snprintf(payload, sizeof(payload), "{\"alineacion\":%.2f,\"peralte\":%.2f,\"nivel_izquierdo\":%.2f,\"nivel_derecho\":%.2f,\"distancia\":%d,\"idtrabajo2\":%d,\"tipoMedicion\":\"%d\"}", alineacion, peralte, nivel_izquierdo, nivel_derecho, distancia, idtrabajo2, tipoMedicion);
     esp_mqtt_client_publish(client, "Bateadora", payload, 0, 1, 0);
