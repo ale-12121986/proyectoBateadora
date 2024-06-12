@@ -4,7 +4,12 @@
 # PproyectoBateadora
 ## informacion general
 Este sistema se va a encargar de recopilar todos los datos de la geometria de la via y enviarlos por protocola MQTT a un servidor en la nube.
-Consta de una pantalla tactil en la cual se va a a ver los valores de los transmisores y de los grupos de bajada 
+Consta de una pantalla tactil en la cual se va a a ver los valores de los transmisores y de los grupos de bajada.
+
+La pantalla tactil se coomunica por puerto serial al ESP32, el cual va a servir de interfaz grafica poder interactuar, tiene un boton con el nombre de Conectar cuando se presione se va a suscribir al broker mqtt con el topic Bateadora/201 al estar conectado tienes que precionar el boton de sensores al precionar ese boton, se envia el mensaje "trabajo" y te va a regresar el ide trabajo y asi se tiene identificado el que trabajo se va a realizare, antes de empezar a medir tienes que elegir que recorrido va a realizar:
+R1. El primer recorrido para ver como esta la via antes de realizar el trabajo de mejoramiento. 
+R2. El segundo recorrido que se hace cuando se esta trabajando.
+R3. El tercer recorrido es el que va a mostrar como quedo la via despues del trabajo de mejoramiento.
 
 
 
