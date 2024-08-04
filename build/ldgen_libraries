@@ -59,6 +59,8 @@ D:/ESP32-IDF/proyectoBateadora/build/esp-idf/spiffs/libspiffs.a
 D:/ESP32-IDF/proyectoBateadora/build/esp-idf/ulp/libulp.a
 D:/ESP32-IDF/proyectoBateadora/build/esp-idf/wifi_provisioning/libwifi_provisioning.a
 D:/ESP32-IDF/proyectoBateadora/build/esp-idf/main/libmain.a
+D:/ESP32-IDF/proyectoBateadora/build/esp-idf/comunicacionSerial/libcomunicacionSerial.a
 D:/ESP32-IDF/proyectoBateadora/build/esp-idf/comunicacionWiFi/libcomunicacionWiFi.a
 D:/ESP32-IDF/proyectoBateadora/build/esp-idf/grupoBateo/libgrupoBateo.a
 D:/ESP32-IDF/proyectoBateadora/build/esp-idf/grupoMedicion/libgrupoMedicion.a
+D:/ESP32-IDF/proyectoBateadora/build/esp-idf/moduloRele/libmoduloRele.a

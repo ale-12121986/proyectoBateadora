@@ -1,4 +1,3 @@
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
@@ -10,14 +9,14 @@
 #include "mqtt_client.h"
 
 
- // En segundos
-#define WIFI_SSID "Telecentro-93e3_0_1"
-#define WIFI_PASS "Alex+18996365"
+//  // En segundos
+// #define WIFI_SSID "Telecentro-93e3_0_1"
+// #define WIFI_PASS "Alex+18996365"
 
-// #define WIFI_SSID "motorola edge 20 pro_8815"
-// #define WIFI_PASS "Ale-18996365"
+#define WIFI_SSID "motorola edge 20 pro_8815"
+#define WIFI_PASS "Ale-18996365"
 
-#define MQTT_URI "mqtts://192.168.2.4:8883/"     //54.232.196.184   192.168.2.4  192.168.75.8
+#define MQTT_URI "mqtts://192.168.243.8:8883/"     //54.232.196.184   192.168.2.4 
 #define MQTT_TOPIC "Bateadora/201"//"Bateadora/201"
 #define MQTT_KEEPALIVE_INTERVAL  60 
                                                  

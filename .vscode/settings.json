@@ -13,7 +13,7 @@
     ],
     "idf.pythonBinPathWin": "d:\\ESP32\\.espressif\\python_env\\idf5.0_py3.11_env\\Scripts\\python.exe",
     "idf.toolsPathWin": "d:\\ESP32\\.espressif",
-    "idf.portWin": "COM13",
+    "idf.portWin": "COM9",
     "idf.flashType": "UART",
     "files.associations": {
         "task.h": "c",
@@ -24,7 +24,9 @@
         "gpio.h": "c",
         "timers.h": "c",
         "mqtt_client.h": "c",
-        "comunicacionwifi.h": "c"
+        "comunicacionwifi.h": "c",
+        "stdio.h": "c"
     },
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "idf.gitPathWin": "d:\\ESP32\\.espressif\\tools\\idf-git\\2.39.2\\cmd\\git.exe"
 }

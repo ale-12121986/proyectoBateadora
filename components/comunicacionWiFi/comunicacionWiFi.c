@@ -161,8 +161,6 @@ static void mqtt_app_start(void){
     client = esp_mqtt_client_init(&mqtt_cfg);
     esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, NULL);
     ESP_LOGI(TAG4, "[APP] Free memory: %ld bytes", esp_get_free_heap_size());
-       
-    /* The last argument may be used to pass data to the event handler, in this example mqtt_event_handler */
     
     esp_mqtt_client_start(client);
 }

@@ -77,22 +77,25 @@ float leerTransmisorMedicion(int8_t sensor){
     case 1:
          alineacion = alpha2 * valor + (1 - alpha2) * alineacion;
         salida_filtrada =map(alineacion, 0, 4096, -434.782, 434.782);
-        //ESP_LOGI(TAG2,"alineacion:%f", salida_filtrada);
+        ESP_LOGI(TAG2,"alineacion:%f", salida_filtrada);
         break;
     
     case 2:
         peralte = alpha2 * valor + (1 - alpha2) * peralte;  
         salida_filtrada =map(peralte, 0, 4096, -400, 400);
+        ESP_LOGI(TAG2,"peralte:%f", salida_filtrada);
         break;
 
     case 3:
         nivelIzquierdo = alpha2 * valor + (1 - alpha2) * nivelIzquierdo;
         salida_filtrada =map(nivelIzquierdo, 0, 4096, -111.111, 111.111);  
+        ESP_LOGI(TAG2,"nivel izquierdo:%f", salida_filtrada);
         break;
 
     case 4:
         nivelDerecho = alpha2 * valor + (1 - alpha2) * nivelDerecho;
         salida_filtrada =map(nivelDerecho, 0, 4096, -111.111, 111.111);
+        ESP_LOGI(TAG2,"nivel derecho:%f", salida_filtrada);
         break;
     default:
         break;
