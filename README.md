@@ -1,61 +1,152 @@
 | Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-S2 | ESP32-S3 |
 | ----------------- | ----- | -------- | -------- | -------- | -------- |
 
-# ProyectoBateadora
-## informacion general
-Este sistema se va a encargar de recopilar todos los datos de la geometria de la via y enviarlos por protocola MQTT a un servidor en la nube.
-Consta de una pantalla tactil en la cual se va a a ver los valores de los transmisores y de los grupos de bajada.
+# 🚧 Proyecto Bateadora - Sistema de Medición y Monitoreo de Vía
 
-La pantalla tactil se coomunica por puerto serial al ESP32, el cual va a servir de interfaz grafica poder interactuar, tiene un boton con el nombre de Conectar cuando se presione se va a suscribir al broker mqtt con el topic Bateadora/201 al estar conectado tienes que precionar el boton de sensores al precionar ese boton, se envia el mensaje "trabajo" y te va a regresar el ide trabajo y asi se tiene identificado el que trabajo se va a realizare, antes de empezar a medir tienes que elegir que recorrido va a realizar:
-R1. El primer recorrido para ver como esta la via antes de realizar el trabajo de mejoramiento. 
-R2. El segundo recorrido que se hace cuando se esta trabajando.
-R3. El tercer recorrido es el que va a mostrar como quedo la via despues del trabajo de mejoramiento.
+Sistema embebido para la adquisición, visualización y transmisión de datos de geometría de vía ferroviaria, utilizando ESP32 y comunicación MQTT hacia la nube.
+
+---
+
+## 📌 Descripción General
+
+Este proyecto implementa un sistema de monitoreo para una máquina bateadora, encargado de:
+
+- 📡 Recopilar datos de la geometría de la vía
+- 📊 Visualizar en tiempo real los valores de sensores y grupos de bajada
+- ☁️ Enviar información a un servidor en la nube mediante protocolo MQTT
+
+El sistema está diseñado para operar en entornos industriales, permitiendo trazabilidad del estado de la vía antes, durante y después del proceso de mantenimiento.
+
+---
+
+## 🧠 Arquitectura del Sistema
+
+El sistema está compuesto por:
+
+- 🔹 **ESP32**: Unidad central de procesamiento y comunicación
+- 🔹 **Pantalla táctil**: Interfaz gráfica de usuario (HMI)
+- 🔹 **Sensores de medición**: Captura de datos de la vía
+- 🔹 **Broker MQTT**: Comunicación con la nube
+
+La pantalla táctil se comunica con el ESP32 mediante **puerto serial**, actuando como interfaz de operación.
+
+---
+
+## 🔌 Comunicación y Protocolo
+
+- **Protocolo:** MQTT
+- **Broker:** Configurable
+- **Topic de suscripción:**
+
+Bateadora/201
 
 
+### Flujo de conexión:
 
-## How to use example
-We encourage the users to use the example as a template for the new projects.
-A recommended way is to follow the instructions on a [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project).
+1. El usuario presiona el botón **"Conectar"** en la pantalla
+2. El sistema se suscribe al broker MQTT
+3. Se habilita la interacción con sensores
 
-## Example folder contents
+---
 
-The project **sample_project** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
+## ⚙️ Flujo de Operación
 
-ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt`
-files that provide set of directives and instructions describing the project's source files and targets
-(executable, library, or both). 
+### 1. Conexión
+- Presionar botón **"Conectar"**
+- Suscripción al topic MQTT
 
-Below is short explanation of remaining files in the project folder.
+### 2. Selección de trabajo
+- Presionar botón **"Sensores"**
+- Se envía el mensaje:
 
-```
+"trabajo"
+
+- El sistema responde con un ID de trabajo
+
+### 3. Selección de recorrido
+
+Antes de iniciar la medición, se debe seleccionar el tipo de recorrido:
+
+- **R1:** Estado inicial de la vía (antes del mantenimiento)
+- **R2:** Medición durante el proceso de trabajo
+- **R3:** Estado final de la vía (post mantenimiento)
+
+### 4. Medición y transmisión
+- Lectura de sensores
+- Visualización en HMI
+- Envío de datos al servidor en la nube
+
+---
+
+## 📊 Características Principales
+
+- ✔ Monitoreo en tiempo real
+- ✔ Interfaz táctil intuitiva
+- ✔ Comunicación IoT mediante MQTT
+- ✔ Arquitectura modular basada en ESP-IDF
+- ✔ Separación por componentes reutilizables
+
+---
+
+## 🗂️ Estructura del Proyecto
+
+
 proyectoBateadora/
 │
-├── build/
+├── build/ # Archivos de compilación
 │
-├── main/
-│    ├── CMakeLists.txt
-│    └── main.c
-└── components
-     ├── comunicacionWiFi/
-     │     ├── include/
-     │     |     └── comunicacionWiFi.h
-     │     ├── ESP32_1.crt
-     │     ├── rootCA.crt
-     │     ├── ESP32_1.key
-     │     ├── CMakeLists.txt
-     │     ├── components.mk
-     │     └── comunicacionWiFi.c
-     ├── grupoBateo/
-     │     ├── include/
-     │     │    └── grupoBateo.h
-     │     ├── CMakeLists.txt
-     │     └── grupoBateo.c
-     └── grupoMedicion/
-           ├── include/
-           |     └── grupoMedicion.h
-           ├── CMakeLists.txt
-           └── grupoMedicion.c
+├── main/ # Punto de entrada
+│ ├── CMakeLists.txt
+│ └── main.c
+│
+├── components/
+│ ├── comunicacionWiFi/ # Manejo de WiFi y MQTT
+│ │ ├── include/
+│ │ │ └── comunicacionWiFi.h
+│ │ ├── comunicacionWiFi.c
+│ │ ├── certificados/
+│ │ │ ├── ESP32_1.crt
+│ │ │ ├── ESP32_1.key
+│ │ │ └── rootCA.crt
+│ │ └── CMakeLists.txt
+│ │
+│ ├── grupoBateo/ # Control del sistema de bateo
+│ │ ├── include/
+│ │ │ └── grupoBateo.h
+│ │ ├── grupoBateo.c
+│ │ └── CMakeLists.txt
+│ │
+│ └── grupoMedicion/ # Adquisición de datos
+│ ├── include/
+│ │ └── grupoMedicion.h
+│ ├── grupoMedicion.c
+│ └── CMakeLists.txt
 
-```
-Additionally, the sample project contains Makefile and component.mk files, used for the legacy Make based build system. 
-They are not used or needed when building with CMake and idf.py.
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+- **Microcontrolador:** ESP32
+- **Framework:** ESP-IDF
+- **Lenguaje:** C
+- **Comunicación:** UART (HMI) + MQTT (Cloud)
+- **Seguridad:** Certificados TLS
+
+---
+
+## 🚀 Instalación y Ejecución
+
+1. Clonar repositorio:
+```bash
+git clone https://github.com/ale-12121986/proyectoBateadora.git
+
+
+## 📈 Aplicaciones
+🚆 Mantenimiento ferroviario
+🏭 Automatización industrial
+🌐 Sistemas IoT distribuidos
+📊 Monitoreo remoto de infraestructura
+🧪 Estado del Proyecto
+
+## 🟡 Prototipo funcional en desarrollo
