@@ -1,7 +1,7 @@
 | Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-S2 | ESP32-S3 |
 | ----------------- | ----- | -------- | -------- | -------- | -------- |
 
-# PproyectoBateadora
+# ProyectoBateadora
 ## informacion general
 Este sistema se va a encargar de recopilar todos los datos de la geometria de la via y enviarlos por protocola MQTT a un servidor en la nube.
 Consta de una pantalla tactil en la cual se va a a ver los valores de los transmisores y de los grupos de bajada.
